@@ -2,6 +2,6 @@ elpa/
 eshell/
 irony/
 auto-save-list/
-./recentf
-./projectile-bookmarks.el
-./.lsp-session-v1
+recentf
+projectile-bookmarks.el
+.lsp-session-v1
