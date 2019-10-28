@@ -1,1 +1,1 @@
-("~/Desktop/giligili/")
+("~/.emacs.d/")

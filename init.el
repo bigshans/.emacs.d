@@ -9,7 +9,8 @@
 (require 'package)
 (setq package-enable-at-start nil)
 (setq package-archives '(("gnu"   . "https://elpa.emacs-china.org/gnu/")
-                           ("melpa" . "https://elpa.emacs-china.org/melpa/")))
+			 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+			 ))
 
 (package-initialize)
 (unless (package-installed-p 'use-package)
@@ -23,13 +24,37 @@
     (company-mode 1)
     (add-hook 'after-init-hook 'global-company-mode)))
 
-(use-package tide
+(use-package company-irony
   :ensure t
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save)
-	 ))
+  :config
+  (progn
+    (eval-after-load 'company
+      '(add-to-list 'company-backends 'company-irony))
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'objc-mode-hook 'irony-mode)
+
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  )
+
+(use-package haskell-mode
+  :ensure t
+  )
+
+(use-package js2-mode
+  :ensure t
+  :config
+  (progn 
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  ))
+
+;; (use-package tide
+;;   :ensure t
+;;   :after (typescript-mode company flycheck)
+;;   :hook ((typescript-mode . tide-setup)
+;;          (typescript-mode . tide-hl-identifier-mode)
+;;          (before-save . tide-format-before-save)
+;; 	 ))
 
 (use-package flycheck
   :ensure t
@@ -61,6 +86,14 @@
   :ensure t
   :config
   (evil-mode))
+
+(use-package evil-nerd-commenter
+  :ensure t
+  :config
+  (progn
+    (evilnc-default-hotkeys nil t)
+    )
+  )
 
 (use-package org-bullets
   :ensure t
@@ -138,15 +171,17 @@
   :config
   (progn
     (add-hook 'python-mode-hook 'eglot-ensure)
-    (add-hook 'js-mode-hook 'eglot-ensure)
-    (add-hook 'c++-mode-hook 'eglot-ensure)
     (add-hook 'go-mode-hook 'eglot-ensure)
     ))
 
-;;(use-package lsp-mode
-;;  :config
-;;  (add-hook 'c++-mode-hook #'lsp)
-;;  (add-hook 'python-mode-hook #'lsp))
+(use-package lsp-mode
+  :hook (js2-mode . lsp)
+  :commands lsp
+  :config
+  (progn
+    (add-to-list 'lsp-language-id-configuration '(js2-mode . "javascript"))
+  )
+)
 
 (use-package yasnippet
   :ensure t)
@@ -348,10 +383,11 @@
   "q" 'evil-quit
   "Q" 'evil-quit-all
   "x" 'eval-last-sexp
+  "ci" 'evilnc-comment-or-uncomment-lines
   "ss" 'swiper)
 ;; evil config end
 
-(set-default-font "-*-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+; (set-default-font "-*-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
 (setq lsp-language-id-configuration '(
 				      (python-mode . "python3")
 				      (go-mode . "go")
@@ -364,7 +400,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (eglot lsp-imenu yasnippet js2-mode smartparens smartparens-config lsp-python lsp-ui tide company-lsp company neotree projectile doom-modeline dashboard counsel evil-leader org-bullets which-key use-package try evil))))
+    (lsp-mode eglot lsp-imenu yasnippet js2-mode smartparens smartparens-config lsp-python lsp-ui tide company-lsp company neotree projectile doom-modeline dashboard counsel evil-leader org-bullets which-key use-package try evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
