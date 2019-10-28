@@ -1,7 +1,7 @@
-./elpa
-./eshell
-./irony
-./auto-save-list
+./elpa/*
+./eshell/*
+./irony/*
+./auto-save-list/*
 ./recentf
 ./projectile-bookmarks.el
 ./.lsp-session-v1
