@@ -2,6 +2,11 @@ elpa/
 eshell/
 irony/
 auto-save-list/
+pyim/
+transient/
+.cask/
+irony/
 recentf
 projectile-bookmarks.el
 .lsp-session-v1
+bookmarks
