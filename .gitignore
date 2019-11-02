@@ -6,7 +6,11 @@ pyim/
 transient/
 .cask/
 irony/
+url/
 recentf
 projectile-bookmarks.el
 .lsp-session-v1
 bookmarks
+projectile-bookmarks.eld
+pyim-bigdict.pyim
+

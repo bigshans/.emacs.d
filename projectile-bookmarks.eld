@@ -1,1 +1,0 @@
-("~/.emacs.d/" "~/Documents/note/" "~/Desktop/status-server/" "~/.vim/")
