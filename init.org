@@ -1,17 +1,19 @@
 * Org Mode Manager Config
 ** Global Var
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el
-;; (server-start)
-(setq gc-cons-threshold (* 50 1000 1000))
-(global-display-line-numbers-mode)
-(toggle-truncate-lines 1)
-(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
-(show-paren-mode 1)
-(defalias 'yes-or-no-p 'y-or-n-p)
-(tool-bar-mode -1)
-(setq inhibit-startup-message t)
-(setq make-backup-files nil)
-(setq auto-save-default nil)
+     ;; (server-start)
+     (setq gc-cons-threshold (* 50 1000 1000))
+     (if (version<= "26.0.50" emacs-version )
+	 (global-display-line-numbers-mode)
+       (global-linum-mode))
+     (toggle-truncate-lines 1)
+     (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+     (show-paren-mode 1)
+     (defalias 'yes-or-no-p 'y-or-n-p)
+     (tool-bar-mode -1)
+     (setq inhibit-startup-message t)
+     (setq make-backup-files nil)
+     (setq auto-save-default nil)
    #+END_SRC
 ** User Function
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el
@@ -36,17 +38,26 @@
    #+END_SRC
 ** Package Manager
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el
-(require 'package)
-(setq package-enable-at-start nil)
-(setq package-archives '(("gnu"   . "https://elpa.emacs-china.org/gnu/")
-			 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-			 ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-			 ))
+     (require 'package)
+     (setq package-enable-at-start nil)
+     (setq package-archives '(("gnu"   . "https://elpa.emacs-china.org/gnu/")
+			      ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+			      ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
+			      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+			      ))
 
-(package-initialize)
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+
+     (when (not (version<= "26.0.50" emacs-version ))
+       (setq package-archive-priorities '(
+					  ("melpa-stable" . 10)
+					  ("org-cn" . 5)
+					  ("melpa" . 5)
+					  ("gnu" . 5)
+					  )))
+     (package-initialize)
+     (unless (package-installed-p 'use-package)
+       (package-refresh-contents)
+       (package-install 'use-package))
    #+END_SRC
 ** Package
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el  
@@ -397,6 +408,8 @@
 	      ("\\.md\\'" . markdown-mode)
 	      ("\\.markdown\\'" . markdown-mode))
        :init (setq markdown-command "multimarkdown"))
+       (use-package avy
+          :ensure t)
        ;; (use-package eaf
        ;; :load-path "~/.emacs.d/elpa/eaf")
    #+END_SRC
@@ -531,6 +544,8 @@
      (define-key evil-normal-state-map (kbd "wl") 'evil-window-right)
      (define-key evil-normal-state-map (kbd "<up>") 'evil-previous-visual-line)
      (define-key evil-normal-state-map (kbd "<down>") 'evil-next-visual-line)
+     (define-key evil-normal-state-map (kbd "C-s") 'avy-goto-char)
+     (define-key evil-normal-state-map (kbd "C-;") 'avy-goto-char-2)
    #+END_SRC
 ** Key Config for Evil Org Mode
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el   

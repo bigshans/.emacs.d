@@ -1,6 +1,8 @@
 ;; (server-start)
 (setq gc-cons-threshold (* 50 1000 1000))
-(global-display-line-numbers-mode)
+(if (version<= "26.0.50" emacs-version )
+    (global-display-line-numbers-mode)
+  (global-linum-mode))
 (toggle-truncate-lines 1)
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 (show-paren-mode 1)
@@ -33,9 +35,18 @@
 (setq package-enable-at-start nil)
 (setq package-archives '(("gnu"   . "https://elpa.emacs-china.org/gnu/")
 			 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+			 ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
 			 ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
 			 ))
 
+
+(when (not (version<= "26.0.50" emacs-version ))
+  (setq package-archive-priorities '(
+				     ("melpa-stable" . 10)
+				     ("org-cn" . 5)
+				     ("melpa" . 5)
+				     ("gnu" . 5)
+				     )))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -43,7 +54,7 @@
 
 (use-package restart-emacs
 	 :ensure t)
-    
+
        (use-package magit
 	 :ensure t)
 
@@ -53,7 +64,7 @@
 	 (progn
 	   (company-mode 1)
 	   (add-hook 'after-init-hook 'global-company-mode)))
-      
+
      ;;  (use-package company-tern
      ;;     :ensure t
      ;;     :config
@@ -388,8 +399,10 @@
 	 ("\\.md\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
-  (use-package eaf
-  :load-path "~/.emacs.d/elpa/eaf")
+  (use-package avy
+     :ensure t)
+  ;; (use-package eaf
+  ;; :load-path "~/.emacs.d/elpa/eaf")
 
 (use-package evil-leader
   :ensure t
@@ -413,7 +426,7 @@
   "qQ" 'evil-quit-all
   "qr" 'restart-emacs
   "x" 'eval-last-sexp
-  "ci" 'evilnc-comment-or-uncomment-lines
+  "ci" 'comment-or-uncomment-region
   "oi" '(lambda ()
 	  (interactive)
 	  (find-file "~/.emacs.d/init.org"))
@@ -431,7 +444,7 @@
   "m'" 'org-edit-special
   "mc" 'org-ctrl-c-ctrl-c
   "me" 'org-export-dispatch
-  "mts" 'org-clock-in
+  "mti" 'org-clock-in
   "mte" 'org-clock-out
   "ss" 'swiper
   "wv" 'split-window-vertically
@@ -513,6 +526,8 @@
 (define-key evil-normal-state-map (kbd "wl") 'evil-window-right)
 (define-key evil-normal-state-map (kbd "<up>") 'evil-previous-visual-line)
 (define-key evil-normal-state-map (kbd "<down>") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "C-s") 'avy-goto-char)
+(define-key evil-normal-state-map (kbd "C-;") 'avy-goto-char-2)
 
 (add-hook 'org-mode-hook (lambda ()
 				(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))
