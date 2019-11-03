@@ -487,7 +487,9 @@
   (setq pyim-isearch-enable-pinyin-search t)
 
   ;; 使用 pupup-el 来绘制选词框
-  (setq pyim-use-tooltip 'posframe)
+     (if (version<= "26.0.50" emacs-version )
+     (setq pyim-use-tooltip 'posframe)
+     (setq pyim-use-tooltip 'popup))
 
   ;; 选词框显示5个候选词
   (setq pyim-page-length 5)

@@ -470,48 +470,53 @@
      #+END_SRC
 **** pyim
      #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el
-(use-package posframe
-   :ensure t)
-(use-package pyim
-  :ensure nil
-  :config
-  ;; 激活 basedict 拼音词库
-  (use-package pyim-basedict
-    :ensure nil
-    :config (pyim-basedict-enable))
-  (setq pyim-dicts '((:file "~/.emacs.d/pyim-bigdict.pyim")))
+     
+       (when (not (version<= "26.0.50" emacs-version ))
+	 (use-package posframe
+	   :ensure t)
+	 )
+       (use-package pyim
+	 :ensure nil
+	 :config
+	 ;; 激活 basedict 拼音词库
+	 (use-package pyim-basedict
+	   :ensure nil
+	   :config (pyim-basedict-enable))
+	 (setq pyim-dicts '((:file "~/.emacs.d/pyim-bigdict.pyim")))
 
-  (setq default-input-method "pyim")
+	 (setq default-input-method "pyim")
 
-  ;; 我使用全拼
-  (setq pyim-default-scheme 'ziranma-shuangpin)
+	 ;; 我使用全拼
+	 (setq pyim-default-scheme 'ziranma-shuangpin)
 
-  ;; 设置 pyim 探针设置，可以实现 *无痛* 中英文切换 :-)
-  (setq-default pyim-english-input-switch-functions
-		'(pyim-probe-dynamic-english
-		  pyim-probe-isearch-mode
-		  pyim-probe-program-mode
-		  pyim-probe-org-structure-template))
+	 ;; 设置 pyim 探针设置，可以实现 *无痛* 中英文切换 :-)
+	 (setq-default pyim-english-input-switch-functions
+		       '(pyim-probe-dynamic-english
+			 pyim-probe-isearch-mode
+			 pyim-probe-program-mode
+			 pyim-probe-org-structure-template))
 
-  (setq-default pyim-punctuation-half-width-functions
-		'(pyim-probe-punctuation-line-beginning
-		  pyim-probe-punctuation-after-punctuation))
+	 (setq-default pyim-punctuation-half-width-functions
+		       '(pyim-probe-punctuation-line-beginning
+			 pyim-probe-punctuation-after-punctuation))
 
-  ;; 开启拼音搜索功能
-  (setq pyim-isearch-enable-pinyin-search t)
+	 ;; 开启拼音搜索功能
+	 (setq pyim-isearch-enable-pinyin-search t)
 
-  ;; 使用 pupup-el 来绘制选词框
-  (setq pyim-use-tooltip 'posframe)
+	 ;; 使用 pupup-el 来绘制选词框
+	    (if (version<= "26.0.50" emacs-version )
+	    (setq pyim-use-tooltip 'posframe)
+	    (setq pyim-use-tooltip 'popup))
 
-  ;; 选词框显示5个候选词
-  (setq pyim-page-length 5)
+	 ;; 选词框显示5个候选词
+	 (setq pyim-page-length 5)
 
-  ;; 让 Emacs 启动时自动加载 pyim 词库
-  (add-hook 'emacs-startup-hook
-	    #'(lambda () (pyim-restart-1 t)))
-  :bind
-  (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
-   ("C-;" . pyim-delete-word-from-personal-buffer)))
+	 ;; 让 Emacs 启动时自动加载 pyim 词库
+	 (add-hook 'emacs-startup-hook
+		   #'(lambda () (pyim-restart-1 t)))
+	 :bind
+	 (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
+	  ("C-;" . pyim-delete-word-from-personal-buffer)))
      #+END_SRC
 ** Key Config For neotree
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el   
