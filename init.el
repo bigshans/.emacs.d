@@ -33,7 +33,7 @@
 
 (require 'package)
 (setq package-enable-at-start nil)
-(setq package-archives '(("gnu"   . "https://elpa.emacs-china.org/gnu/")
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
 			 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
 			 ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
 			 ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
@@ -456,8 +456,10 @@
   )
   )
 
-(use-package posframe
-   :ensure t)
+(when (not (version<= "26.0.50" emacs-version ))
+  (use-package posframe
+    :ensure t)
+  )
 (use-package pyim
   :ensure nil
   :config

@@ -40,7 +40,7 @@
    #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/init.el
      (require 'package)
      (setq package-enable-at-start nil)
-     (setq package-archives '(("gnu"   . "https://elpa.emacs-china.org/gnu/")
+     (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
 			      ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
 			      ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
 			      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
